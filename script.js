@@ -53,7 +53,7 @@ btn.addEventListener("click", async (event) => {
   // removes table and input which was rendered previously
   let removeTab = document.querySelector("table");
   let removeEle = document.getElementsByClassName(
-    "p-3 text-center my-2 overflow-auto d-flex mx-auto justify-content-center"
+    "p-3 my-2 mx-auto text-center container"
   )[0];
   if (removeTab) {
     removeTab.remove();
@@ -74,11 +74,15 @@ btn.addEventListener("click", async (event) => {
     if (enteredText.value.trim().length === 0) {
       throw "Please Pass any Input";
     }
-    var inputEntered = document.createElement("h4");
+    var inputEntered = document.createElement("div");
     inputEntered.setAttribute(
       "class",
-      "p-3 text-center my-2 overflow-auto d-flex mx-auto justify-content-center"
+      "p-3 my-2 mx-auto text-center container"
     );
+    inputEntered.style.fontSize = "1.3rem";
+    inputEntered.maxWidth = "30rem";
+    // qwertyuiopasdfghjklzxcvbnm
+    inputEntered.style.whiteSpace = "initial";
     inputEntered.innerHTML = "Input Captured : " + enteredText.value;
     body.append(inputEntered);
 
@@ -95,7 +99,7 @@ btn.addEventListener("click", async (event) => {
     table.style.backgroundColor = "#fff";
     table.setAttribute(
       "class",
-      "table table-striped table-hover text-center w-50 mx-auto container-fluid table-bordered"
+      "table table-striped table-hover text-center w-50 mx-auto container-fluid table-bordered align-items-center"
     );
     let thead = document.createElement("thead");
     let tableRow = table.insertRow();
