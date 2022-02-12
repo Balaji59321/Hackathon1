@@ -62,18 +62,19 @@ btn.addEventListener("click", async (event) => {
     removeEle.remove();
   }
 
-  // parsing results based on API response
-  let req = await fetch(
-    `https://api.nationalize.io?name=${enteredText.value.trim()}`
-  );
-  let res = await req.json();
-
   // try catch and handle errors
   try {
     // validation on submit
     if (enteredText.value.trim().length === 0) {
       throw "Please Pass any Input";
     }
+
+    // parsing results based on API response
+    let req = await fetch(
+      `https://api.nationalize.io?name=${enteredText.value.trim()}`
+    );
+    let res = await req.json();
+
     var inputEntered = document.createElement("div");
     inputEntered.setAttribute(
       "class",
@@ -112,22 +113,26 @@ btn.addEventListener("click", async (event) => {
     table.append(thead);
 
     // sorting value based on probability value
-    Object.entries(res["country"]).sort((a, b) => +b[1] - +a[1]);
+    let ans = Object.entries(res["country"]).sort(
+      (a, b) => +b[1]["probability"] - +a[1]["probability"]
+    );
 
-    // construction of table body with received results
+    // construction of table body with two results
     let tbody = document.createElement("tbody");
-    if (res["country"].length > 2) {
-      for (let i = 0; i < 2; i++) {
-        let tableBodyRow = table.insertRow();
-        let countryCode = tableBodyRow.insertCell();
-        countryCode.innerHTML = res["country"][i]["country_id"];
-        countryCode.setAttribute("class", "text-danger");
-        countryCode.style.fontWeight = "bolder";
-        let probability = tableBodyRow.insertCell();
-        probability.innerHTML = res["country"][i]["probability"];
-        tableBodyRow.append(countryCode, probability);
-        tbody.append(tableBodyRow);
-      }
+    let len = res["country"].length;
+    if (len > 2) {
+      len = 2;
+    }
+    for (let i = 0; i < len; i++) {
+      let tableBodyRow = table.insertRow();
+      let countryCode = tableBodyRow.insertCell();
+      countryCode.innerHTML = ans[i][1]["country_id"];
+      countryCode.setAttribute("class", "text-danger");
+      countryCode.style.fontWeight = "bolder";
+      let probability = tableBodyRow.insertCell();
+      probability.innerHTML = ans[i][1]["probability"];
+      tableBodyRow.append(countryCode, probability);
+      tbody.append(tableBodyRow);
     }
     table.append(tbody);
     body.append(table);
